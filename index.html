@@ -634,7 +634,7 @@
         function sendReport() { const p = document.getElementById('priceDisplay').innerText; const net = document.getElementById('netPnl').innerText; const eq = document.getElementById('equity').innerText; const d = document.getElementById('netDelta').innerText; sendTG(`📊 <b>${sys.token}</b>\nPrice: ${p}\nPnL: ${net}\nEq: ${eq}\nDelta: ${d}`); }
 
         function changeToken() { sys.token = document.getElementById('tokenSelect').value; document.getElementById('simUnit').innerText = sys.token; logAI(`Token: ${sys.token}`); initWS(); saveData(); }
-        function logAI(msg, cls='') { const b = document.getElementById('aiLog'); const d = document.createElement('div'); d.className = `ai-log-item new ${cls}`; d.innerText = `> ${msg}`; b.appendChild(d); if(b.children.length>2) b.firstElementChild.remove(); }
+        function logAI(msg, cls='') { const b = document.getElementById('aiLog'); const d = document.createElement('div'); d.className = `ai-log-item new ${cls}`; d.innerText = `> ${msg}`; b.appendChild(d); if(b.children.length>4) b.firstElementChild.remove(); }
 
         async function runOCR(file) {
             if(!file) return; logAI("Scanning...");
