@@ -32,8 +32,8 @@
 ## 🚀 快速开始
 
 ### 直接使用
-1. 下载 `HY01.txt` 文件
-2. 重命名为 `HY01.html`
+1. 下载 `index.html` 文件
+2. 重命名为 `index.html`
 3. 用浏览器打开即可（支持 Chrome/Edge/Safari）
 
 ### 在线部署
