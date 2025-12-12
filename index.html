@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>@oAdam</title>
+    <title>@oAdam TERMINAL V42</title>
     <script src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'></script>
     <!-- New: html2canvas library for taking screenshots -->
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
@@ -279,9 +279,27 @@
         .refresh-btn:hover { color: var(--pri); border-color: var(--pri); }
 
         /* Bottom */
-        .bottom-fix { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 90; }
+        .bottom-fix { 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            width: 100%; 
+            z-index: 90; 
+            /* Increased padding-bottom to compensate for increased dock height */
+            padding-bottom: 20px; 
+        }
         .ai-bar { height: 18px; background: var(--ai-bg); border-top: 1px solid var(--input-border); display: flex; align-items: center; padding: 0 10px; font-size: 9px; color: var(--dim); font-family: monospace; backdrop-filter: blur(4px); white-space: nowrap; overflow: hidden; }
-        .dock { display: flex; gap: 8px; padding: 8px 12px 10px 12px; background: var(--dock-bg); border-top: 1px solid var(--input-border); }
+        .dock { 
+            display: flex; 
+            gap: 8px; 
+            padding: 8px 12px 10px 12px; 
+            background: var(--dock-bg); 
+            border-top: 1px solid var(--input-border); 
+            /* Increased dock height */
+            height: 70px; 
+            align-items: center;
+            justify-content: space-around;
+        }
         .d-btn { flex: 1; padding: 6px 0; background: var(--panel); border: 1px solid var(--input-border); color: var(--dim); cursor: pointer; border-radius: var(--rad); font-size: 10px; display: flex; flex-direction: column; align-items: center; gap: 2px; }
         .d-btn:active { border-color: var(--pri); color: var(--pri); transform: scale(0.98); }
 
@@ -682,7 +700,7 @@
             // Inject default address if no addresses loaded from storage
             const defaultAddress = '0xb317d2bc2d3d2df5fa441b5bae0ab9d8b07283ae';
             const defaultName = '内幕大佬';
-            if (sys.whaleAddresses.length === 0) {
+            if (!sys.whaleAddresses.some(w => w.address === defaultAddress)) {
                  sys.whaleAddresses.push({address: defaultAddress, name: defaultName});
             }
             
@@ -1164,7 +1182,7 @@
                 const d=JSON.parse(localStorage.getItem('cht_v42')); 
                 if(d) { 
                     set('lPrice',d.lP); set('lSize',d.lS); set('sPrice',d.sP); set('sS',d.sS); set('wallet',d.w); set('lev',d.lev); 
-                    sys.token=d.t; sys.source=d.src; sys.theme=d.th; sys.useProxy=d.px; 
+                    sys.token=d.t; sys.source=d.src; sys.useProxy=d.px; 
                     if(d.lp) sys.price = d.lp; // Load last price for instant render
                     document.getElementById('tokenSelect').value=d.t; document.getElementById('tgToken').value=d.tt; document.getElementById('tgChatId').value=d.tc; 
                     sys.geckoId = cgMap[d.t] || 'ethereum';
@@ -1180,10 +1198,12 @@
                     applyTheme(sys.theme); // Apply the theme after potentially setting it to pixel
                     if(d.px) document.getElementById('pDot').style.left='18px'; 
                     
-                    // Load new persistent data
+                    // --- FIX: Load new persistent data ---
                     sys.whaleAddresses = d.wA || [];
                     sys.lastTgUpdateId = d.lT || 0;
                     sys.lastAnalysisTime = d.lAT || { '1h': 0, '4h': 0, '1d': 0 };
+                    // --- END FIX ---
+
                 } else {
                     // If no settings saved at all, force pixel theme
                     sys.theme = 'pixel';
