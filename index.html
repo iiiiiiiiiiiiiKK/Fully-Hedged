@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>@oAdam TERMINAL V22</title>
+    <title>@oAdam TERMINAL V23</title>
     <script src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'></script>
     <style>
         @font-face { font-family: 'TechMono'; src: local('Courier New'), monospace; }
 
-        /* --- 1. 暗黑主题 (默认) --- */
+        /* --- 1. 默认暗黑主题 (Dark Mode) --- */
         :root {
             --bg: #050505;
             --text-main: #ccc;
@@ -29,7 +29,7 @@
             --shadow: 0 4px 15px rgba(0,0,0,0.6);
         }
 
-        /* --- 2. 明亮主题 --- */
+        /* --- 2. 明亮主题 (Light Mode) --- */
         body.light-mode {
             --bg: #f0f2f5;
             --text-main: #333;
@@ -48,7 +48,7 @@
             --shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
-        /* --- 3. 像素主题 --- */
+        /* --- 3. 黑白像素主题 (Pixel Mode) --- */
         body.pixel-mode {
             --bg: #e0e0e0;
             --text-main: #000;
@@ -81,27 +81,31 @@
         body {
             background: var(--bg); color: var(--text-main);
             font-family: 'TechMono', monospace;
-            margin: 0; padding: 10px; 
+            margin: 0; padding: 8px; 
             font-size: 13px;
-            padding-bottom: 70px;
+            padding-bottom: 60px;
             background-image: var(--hero-bg);
             transition: background 0.3s, color 0.3s;
         }
 
-        /* 布局类 */
+        /* --- 布局通用 --- */
         .flex { display: flex; }
         .j-between { justify-content: space-between; }
         .a-center { align-items: center; }
-        .gap-2 { gap: 10px; }
+        .gap-1 { gap: 5px; }
+        .gap-2 { gap: 8px; }
         .col { flex-direction: column; }
-        .mb-1 { margin-bottom: 6px; }
-        .mb-2 { margin-bottom: 12px; }
+        .mb-1 { margin-bottom: 4px; }
+        .mb-2 { margin-bottom: 8px; }
+        .mt-1 { margin-top: 4px; }
         .bold { font-weight: 800; }
         .text-right { text-align: right; }
+        .text-center { text-align: center; }
         .full-w { width: 100%; }
         .pointer { cursor: pointer; }
+        .h-full { height: 100%; }
 
-        /* 颜色类 */
+        /* --- 颜色 --- */
         .c-pri { color: var(--pri); transition: color 0.3s; }
         .c-dan { color: var(--dan); transition: color 0.3s; }
         .c-safe { color: var(--safe); transition: color 0.3s; }
@@ -110,116 +114,132 @@
         body:not(.light-mode):not(.pixel-mode) .c-pri { text-shadow: 0 0 8px rgba(0,243,255,0.3); }
         body:not(.light-mode):not(.pixel-mode) .c-dan { text-shadow: 0 0 8px rgba(255,0,60,0.3); }
 
-        /* 面板 */
+        /* --- 面板 --- */
         .panel {
             background: var(--panel);
-            border: var(--border); padding: 10px 12px; margin-bottom: 10px;
+            border: var(--border); padding: 8px 10px; margin-bottom: 8px;
             box-shadow: var(--shadow); border-radius: var(--panel-radius);
             transition: background 0.3s, border 0.3s;
+            display: flex; flex-direction: column; justify-content: center;
         }
         .panel-head {
             display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid var(--input-border); padding-bottom: 5px; margin-bottom: 8px;
+            border-bottom: 1px solid var(--input-border); padding-bottom: 4px; margin-bottom: 6px;
             font-size: 10px; color: var(--text-head); letter-spacing: 0.5px;
         }
 
-        /* --- 头部 (间距优化) --- */
-        .header-area { margin-bottom: 8px; padding: 0 2px; height: 36px; }
+        /* --- 头部 (宽敞版) --- */
+        .header-area { margin-bottom: 6px; padding: 0 2px; height: 32px; }
         
-        /* 左侧品牌与按钮组 */
-        .header-left { display: flex; align-items: center; gap: 16px; /* 加大间距 */ }
-        
-        .brand-logo { font-size: 16px; letter-spacing: 0px; font-weight: 900; }
-        .brand-logo a { color: inherit; text-decoration: none; border-bottom: 1px solid transparent; }
+        .brand-logo { font-size: 16px; letter-spacing: 0px; font-weight: 900; margin-right: 8px; }
+        .brand-logo a { color: inherit; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
         .brand-logo a:hover { border-bottom-color: var(--pri); }
         
-        .source-group { display: flex; gap: 6px; } /* 按钮间距 */
         .source-tag { 
             font-size: 9px; padding: 2px 6px; height: 18px; line-height: 12px;
-            background: var(--input-border); border-radius: 4px; cursor: pointer; border: 1px solid transparent; color: var(--text-head); 
+            background: var(--input-border); border-radius: 3px; cursor: pointer; border: 1px solid transparent; color: var(--text-head); 
             display: inline-flex; align-items: center; justify-content: center;
         }
         .source-tag.active { border-color: var(--safe); color: var(--safe); background: rgba(0,255,159,0.1); }
         
-        .theme-btn { 
-            width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--dim); 
-            display: flex; align-items: center; justify-content: center; font-size: 13px; 
-            cursor: pointer; background: var(--input-border); color: var(--text-main); margin-left: 4px;
-        }
+        .theme-btn { width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--dim); display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer; background: var(--input-border); color: var(--text-main); }
 
-        /* 右侧价格 */
-        .header-right { display: flex; align-items: center; gap: 10px; height: 100%; padding-right: 4px; }
+        .header-right {
+            display: flex; align-items: center; gap: 8px; height: 100%;
+            padding-right: 12px; 
+        }
         .price-hero { font-size: 20px; font-weight: 900; letter-spacing: -0.5px; transition: color 0.2s; line-height: 1; }
         
         select#tokenSelect {
-            -webkit-appearance: none; background: transparent; border: none; 
-            color: var(--pri); font-weight: 900; font-size: 20px; 
-            text-align: right; cursor: pointer; padding: 0; margin: 0; font-family: inherit;
+            -webkit-appearance: none; 
+            background: transparent; border: none; 
+            color: var(--pri); font-weight: 900; 
+            font-size: 20px; 
+            text-align: right; cursor: pointer;
+            padding: 0; margin: 0; width: auto;
+            font-family: inherit;
         }
 
-        /* 输入框 */
+        /* --- 输入框 --- */
         .input-group { position: relative; width: 100%; }
         .input-label { font-size: 9px; color: var(--dim); position: absolute; top: 0px; left: 0; pointer-events: none; }
         input {
             background: transparent; border: none; border-bottom: 1px solid var(--input-border);
             color: var(--text-main); width: 100%; text-align: right; font-family: inherit;
-            font-size: 15px; outline: none; padding-top: 14px; font-weight: bold;
+            font-size: 15px; outline: none; padding-top: 12px; font-weight: bold;
             transition: border 0.3s;
         }
         input:focus { border-color: var(--pri); }
         .short input:focus { border-color: var(--dan); }
+        
         .input-center input { text-align: center; font-size: 16px; }
         .input-center .input-label { width: 100%; text-align: center; left: 0; }
 
-        /* 模拟沙盘 */
-        .sim-box { background: rgba(128,128,128,0.05); border: 1px dashed var(--dim); padding: 8px; border-radius: var(--panel-radius); }
+        /* --- 模拟沙盘 --- */
+        .sim-box {
+            background: rgba(128,128,128,0.05); border: 1px dashed var(--dim); padding: 6px; border-radius: var(--panel-radius);
+        }
         .sim-row { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 2px; }
         .sim-val { font-weight: bold; }
         .unit-tag { position: absolute; right: 0; top: 14px; font-size: 9px; color: var(--dim); }
 
-        /* 策略表 */
+        /* --- 策略表 --- */
         .strat-table { width: 100%; font-size: 11px; border-collapse: collapse; }
-        .strat-table td { padding: 6px 2px; border-bottom: 1px dashed var(--input-border); cursor: pointer; }
+        .strat-table td { padding: 5px 2px; border-bottom: 1px dashed var(--input-border); cursor: pointer; }
         .strat-table tr:hover { background: rgba(128,128,128,0.1); }
         .strat-btn { font-size: 9px; padding: 1px 5px; border: 1px solid var(--dim); border-radius: 3px; color: var(--dim); }
 
-        /* 底部 */
-        .bottom-area { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100; }
-        .ai-terminal {
-            height: 26px; overflow: hidden; padding: 2px 10px; font-size: 9px; color: var(--dim); font-family: monospace;
-            border-top: 1px solid var(--input-border); background: var(--ai-bg); backdrop-filter: blur(4px);
-            display: flex; flex-direction: column; justify-content: flex-end; line-height: 11px;
+        /* --- 底部区域 --- */
+        .bottom-area {
+            position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100;
         }
-        .ai-log-item { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-left: 2px solid transparent; padding-left: 6px; }
+
+        /* AI 终端 */
+        .ai-terminal {
+            height: 26px; overflow: hidden; 
+            padding: 2px 10px; font-size: 9px; color: var(--dim); font-family: monospace;
+            border-top: 1px solid var(--input-border); 
+            background: var(--ai-bg); 
+            backdrop-filter: blur(4px);
+            display: flex; flex-direction: column; justify-content: flex-end;
+            line-height: 11px;
+        }
+        .ai-log-item { 
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            border-left: 2px solid transparent; padding-left: 6px; 
+        }
         .ai-log-item.new { border-left-color: var(--pri); color: var(--text-main); animation: fadeIn 0.3s; }
         @keyframes fadeIn { from { opacity: 0; transform: translateX(-5px); } to { opacity: 1; transform: 0; } }
 
         /* Dock */
-        .dock { display: flex; gap: 8px; padding: 8px 12px 12px 12px; background: var(--dock-bg); border-top: 1px solid var(--input-border); }
+        .dock {
+            display: flex; gap: 6px; padding: 6px 10px 8px 10px;
+            background: var(--dock-bg); border-top: 1px solid var(--input-border);
+        }
         .btn {
-            flex: 1; padding: 8px 0; background: var(--panel); border: 1px solid var(--input-border);
+            flex: 1; padding: 6px 0;
+            background: var(--panel); border: 1px solid var(--input-border);
             color: var(--dim); cursor: pointer; border-radius: var(--btn-radius); font-size: 10px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
             transition: all 0.1s;
         }
         .btn:active { background: var(--input-border); color: var(--pri); transform: scale(0.98); }
-        .btn i { font-size: 15px; font-style: normal; }
+        .btn i { font-size: 14px; font-style: normal; }
 
-        /* --- Modal (修复显示与间距) --- */
+        /* --- Modal (优化版) --- */
         .modal-overlay { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.85); z-index: 9999; /* 极大值确保最顶层 */
+            background: rgba(0,0,0,0.85); z-index: 9999; 
             display: none; justify-content: center; align-items: center; 
             backdrop-filter: blur(5px); 
         }
         
-        /* 强制显示类，用于 JS 切换 */
         .modal-overlay.show { display: flex !important; }
 
         .modal { 
             background: var(--panel); border: 1px solid var(--pri); 
             width: 85%; max-width: 320px; padding: 25px 20px; 
-            border-radius: var(--panel-radius); box-shadow: 0 0 30px rgba(0,0,0,0.5); color: var(--text-main); 
+            border-radius: var(--panel-radius); box-shadow: 0 0 30px rgba(0,0,0,0.4); color: var(--text-main); 
         }
         
         .modal-input-col { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; margin-top: 10px; }
@@ -242,11 +262,11 @@
 
     <!-- Header -->
     <div class="flex j-between a-center header-area">
-        <div class="header-left">
+        <div class="flex a-center gap-2">
             <div class="brand-logo c-pri">
                 <a href="https://x.com/0xkillcoin" target="_blank">@oAdam</a>
             </div>
-            <div class="source-group">
+            <div class="flex gap-1 a-center">
                 <div class="source-tag active" id="srcBinance" onclick="setSource('binance')">BINANCE</div>
                 <div class="source-tag" id="srcOkx" onclick="setSource('okx')">OKX</div>
             </div>
@@ -375,8 +395,8 @@
     <!-- Bottom Area -->
     <div class="bottom-area">
         <div id="aiLog" class="ai-terminal">
-            <div class="ai-log-item">System @oAdam V22.</div>
-            <div class="ai-log-item">Ready.</div>
+            <div class="ai-log-item">System @oAdam V23.</div>
+            <div class="ai-log-item">Data Persistence Active.</div>
         </div>
         <div class="dock">
             <button class="btn" onclick="document.getElementById('ocrInput').click()"><i>📷</i> 识别</button>
@@ -388,22 +408,22 @@
 
     <input type="file" id="ocrInput" style="display:none" accept="image/*" onchange="runOCR(this.files[0])">
 
-    <!-- TG Modal (Fixed) -->
+    <!-- TG Modal -->
     <div class="modal-overlay" id="tgModal">
         <div class="modal">
-            <div class="flex j-between" style="margin-bottom:15px">
-                <span class="bold c-pri" style="font-size:14px">Telegram Config</span>
-                <span onclick="closeTG()" class="pointer" style="font-size:18px">✕</span>
+            <div class="flex j-between modal-title-row">
+                <span class="bold c-pri" style="font-size:16px">Telegram Config</span>
+                <span onclick="closeTG()" class="pointer" style="font-size:20px; padding:5px;">✕</span>
             </div>
             
             <div class="modal-input-col">
                 <div class="modal-input-item">
-                    <span class="input-label" style="position:static; margin-bottom:4px;">Bot Token</span>
-                    <input type="text" id="tgToken" placeholder="123456:ABC-Def..." style="text-align:left; border-bottom:1px solid var(--dim);">
+                    <span class="modal-input-label" style="font-size:10px; color:var(--dim); display:block; margin-bottom:4px;">Bot Token</span>
+                    <input type="text" id="tgToken" class="modal-input" placeholder="..." style="text-align:left; border-bottom:1px solid var(--dim);">
                 </div>
                 <div class="modal-input-item">
-                    <span class="input-label" style="position:static; margin-bottom:4px;">Chat ID</span>
-                    <input type="text" id="tgChatId" placeholder="-100xxxxxxx" style="text-align:left; border-bottom:1px solid var(--dim);">
+                    <span class="modal-input-label" style="font-size:10px; color:var(--dim); display:block; margin-bottom:4px;">Chat ID</span>
+                    <input type="text" id="tgChatId" class="modal-input" placeholder="..." style="text-align:left; border-bottom:1px solid var(--dim);">
                 </div>
             </div>
 
@@ -412,30 +432,89 @@
                 <span>CORS Proxy (Recommended)</span>
             </div>
 
-            <button class="modal-btn" onclick="testTG()">Test Send</button>
+            <button class="modal-btn full-w" onclick="testTG()">Test Send</button>
         </div>
     </div>
 
     <script>
-        // --- 核心逻辑 ---
         const sys = { token: 'ETH', price: 0, source: 'binance', ws: null, useProxy: true, lastStratTime: 0, theme: 'dark' };
 
+        // --- Data Persistence ---
+        function saveData() {
+            const data = {
+                lPrice: document.getElementById('lPrice').value,
+                lSize: document.getElementById('lSize').value,
+                sPrice: document.getElementById('sPrice').value,
+                sSize: document.getElementById('sSize').value,
+                wallet: document.getElementById('wallet').value,
+                lev: document.getElementById('lev').value,
+                token: sys.token,
+                source: sys.source,
+                theme: sys.theme,
+                proxy: sys.useProxy,
+                tgToken: document.getElementById('tgToken').value,
+                tgChatId: document.getElementById('tgChatId').value
+            };
+            localStorage.setItem('cht_data_v23', JSON.stringify(data));
+        }
+
+        function loadData() {
+            const raw = localStorage.getItem('cht_data_v23');
+            if (!raw) {
+                // First run defaults
+                document.getElementById('wallet').value = 1500;
+                document.getElementById('lev').value = 50;
+                return;
+            }
+            try {
+                const data = JSON.parse(raw);
+                if(data.lPrice) document.getElementById('lPrice').value = data.lPrice;
+                if(data.lSize) document.getElementById('lSize').value = data.lSize;
+                if(data.sPrice) document.getElementById('sPrice').value = data.sPrice;
+                if(data.sSize) document.getElementById('sSize').value = data.sSize;
+                if(data.wallet) document.getElementById('wallet').value = data.wallet;
+                if(data.lev) document.getElementById('lev').value = data.lev;
+                
+                if(data.token) { sys.token = data.token; document.getElementById('tokenSelect').value = data.token; document.getElementById('simUnit').innerText = data.token; }
+                if(data.source) sys.source = data.source;
+                if(data.theme) { sys.theme = data.theme; applyTheme(data.theme); }
+                if(data.proxy !== undefined) { sys.useProxy = data.proxy; updateProxyUI(); }
+                if(data.tgToken) document.getElementById('tgToken').value = data.tgToken;
+                if(data.tgChatId) document.getElementById('tgChatId').value = data.tgChatId;
+                
+                updateSourceUI();
+            } catch(e) { console.error("Load failed", e); }
+        }
+
         window.onload = () => {
-            initWS(); loadSettings();
-            document.getElementById('lPrice').value = 3775.26; document.getElementById('lSize').value = 3.5;
-            document.getElementById('sPrice').value = 2888.62; document.getElementById('sSize').value = 1.6;
+            loadData();
+            initWS();
             calcAll();
         };
 
-        // Modal Control (Fixed)
-        function openTG() { document.getElementById('tgModal').classList.add('show'); }
-        function closeTG() { document.getElementById('tgModal').classList.remove('show'); }
-        function toggleProxy() { sys.useProxy = !sys.useProxy; document.getElementById('proxyToggle').classList.toggle('active'); }
+        // --- Core Logic ---
+        function toggleTheme() {
+            const themes = ['dark', 'light', 'pixel'];
+            const next = themes[(themes.indexOf(sys.theme) + 1) % themes.length];
+            sys.theme = next;
+            applyTheme(next);
+            saveData();
+        }
 
-        // --- 计算与网络 ---
+        function applyTheme(t) {
+            const b = document.body; const i = document.getElementById('themeIcon');
+            b.classList.remove('light-mode', 'pixel-mode');
+            if(t==='light') { b.classList.add('light-mode'); i.innerText='🌙'; }
+            else if(t==='pixel') { b.classList.add('pixel-mode'); i.innerText='👾'; }
+            else { i.innerText='☀️'; }
+        }
+
         function setSource(src) {
-            sys.source = src; document.querySelectorAll('.source-tag').forEach(el => el.classList.remove('active'));
-            document.getElementById(src === 'binance' ? 'srcBinance' : 'srcOkx').classList.add('active'); logAI(`Source: ${src.toUpperCase()}`); initWS();
+            sys.source = src; updateSourceUI(); logAI(`Source: ${src.toUpperCase()}`); initWS(); saveData();
+        }
+        function updateSourceUI() {
+            document.querySelectorAll('.source-tag').forEach(el => el.classList.remove('active'));
+            document.getElementById(sys.source === 'binance' ? 'srcBinance' : 'srcOkx').classList.add('active');
         }
         function switchSource() { setSource(sys.source === 'binance' ? 'okx' : 'binance'); }
 
@@ -457,6 +536,9 @@
         function set(id, val) { document.getElementById(id).value = val; }
 
         function calcAll() {
+            // Save on every calc to ensure latest state is kept
+            saveData();
+
             const p = sys.price; if(!p) return;
             const lP = get('lPrice'); const lS = get('lSize'); const sP = get('sPrice'); const sS = get('sSize');
             const w = get('wallet'); const lev = get('lev');
@@ -514,28 +596,38 @@
             html += `</tbody></table>`; document.getElementById('stratContent').innerHTML = html;
         }
 
-        function loadSettings() { document.getElementById('tgToken').value = localStorage.getItem('tg_token') || ''; document.getElementById('tgChatId').value = localStorage.getItem('tg_chatid') || ''; }
+        // TG Modal Control
+        function openTG() { document.getElementById('tgModal').classList.add('show'); }
+        function closeTG() { document.getElementById('tgModal').classList.remove('show'); saveData(); }
+        function toggleProxy() { 
+            sys.useProxy = !sys.useProxy; 
+            updateProxyUI();
+            saveData();
+        }
+        function updateProxyUI() {
+            const box = document.getElementById('proxyToggle');
+            if(sys.useProxy) box.classList.add('active'); else box.classList.remove('active');
+        }
         
         async function sendTG(msg) {
             const t = document.getElementById('tgToken').value.trim(); const c = document.getElementById('tgChatId').value.trim();
-            if(!t || !c) { openTG(); return; } localStorage.setItem('tg_token', t); localStorage.setItem('tg_chatid', c);
+            if(!t || !c) { openTG(); return; }
+            // Save immediately on send
+            saveData();
+            
             let url = `https://api.telegram.org/bot${t}/sendMessage?chat_id=${c}&text=${encodeURIComponent(msg)}&parse_mode=HTML`;
             if(sys.useProxy) url = `https://corsproxy.io/?${encodeURIComponent(url)}`;
-            try { const r = await fetch(url); const d = await r.json(); if(d.ok||d.result) { logAI("TG Sent", "c-safe"); closeTG(); } else throw new Error(); } catch(e) { alert("发送失败，请确保开启中继。"); }
+            
+            try { 
+                const r = await fetch(url); const d = await r.json(); 
+                if(d.ok||d.result) { logAI("TG Sent", "c-safe"); closeTG(); } else throw new Error(); 
+            } catch(e) { alert("Failed. Check Proxy/Network."); }
         }
         function testTG() { sendTG(`👋 <b>TEST</b>\n@oAdam`); }
         function sendReport() { const p = document.getElementById('priceDisplay').innerText; const net = document.getElementById('netPnl').innerText; const eq = document.getElementById('equity').innerText; const d = document.getElementById('netDelta').innerText; sendTG(`📊 <b>${sys.token}</b>\nPrice: ${p}\nPnL: ${net}\nEq: ${eq}\nDelta: ${d}`); }
 
-        function changeToken() { sys.token = document.getElementById('tokenSelect').value; document.getElementById('simUnit').innerText = sys.token; logAI(`Token: ${sys.token}`); initWS(); }
+        function changeToken() { sys.token = document.getElementById('tokenSelect').value; document.getElementById('simUnit').innerText = sys.token; logAI(`Token: ${sys.token}`); initWS(); saveData(); }
         function logAI(msg, cls='') { const b = document.getElementById('aiLog'); const d = document.createElement('div'); d.className = `ai-log-item new ${cls}`; d.innerText = `> ${msg}`; b.appendChild(d); if(b.children.length>2) b.firstElementChild.remove(); }
-
-        function toggleTheme() {
-            const b = document.body; const i = document.getElementById('themeIcon');
-            if (sys.theme === 'dark') { b.classList.remove('pixel-mode'); b.classList.add('light-mode'); sys.theme = 'light'; i.innerText = '🌙'; }
-            else if (sys.theme === 'light') { b.classList.remove('light-mode'); b.classList.add('pixel-mode'); sys.theme = 'pixel'; i.innerText = '👾'; }
-            else { b.classList.remove('light-mode', 'pixel-mode'); sys.theme = 'dark'; i.innerText = '☀️'; }
-            logAI(`Theme: ${sys.theme.toUpperCase()}`);
-        }
 
         async function runOCR(file) {
             if(!file) return; logAI("Scanning...");
@@ -543,7 +635,11 @@
                 const w = await Tesseract.createWorker('chi_sim'); const r = await w.recognize(file); await w.terminate();
                 const t = r.data.text.replace(/,/g,'').replace(/\s+/g,' ');
                 const sM = [...t.matchAll(/(?:数量|Size)[^\d]*(\d+\.?\d*)/gi)]; const pM = [...t.matchAll(/(?:价格|Price|Entry)[^\d]*(\d+\.?\d*)/gi)];
-                if(sM.length && pM.length) { set('lSize', sM[0][1]); set('lPrice', pM[0][1]); if(sM[1]) set('sSize', sM[1][1]); if(pM[1]) set('sPrice', pM[1][1]); calcAll(); logAI("OCR Success"); } else logAI("OCR Failed", "c-dan");
+                if(sM.length && pM.length) { 
+                    set('lSize', sM[0][1]); set('lPrice', pM[0][1]); if(sM[1]) set('sSize', sM[1][1]); if(pM[1]) set('sPrice', pM[1][1]); 
+                    calcAll(); // Will trigger save
+                    logAI("OCR Success"); 
+                } else logAI("OCR Failed", "c-dan");
             } catch(e) { console.error(e); }
         }
     </script>
