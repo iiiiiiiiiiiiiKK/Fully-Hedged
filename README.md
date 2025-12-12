@@ -1,4 +1,4 @@
-```markdown
+
 # @oAdam TERMINAL V22
 
 ![Preview](https://img.shields.io/badge/Version-V22-00f3ff) ![Theme](https://img.shields.io/badge/Themes-3-007acc) ![WebSocket](https://img.shields.io/badge/WebSocket-Realtime-00ff9f) ![Mobile](https://img.shields.io/badge/Mobile-Responsive-ffcc00)
