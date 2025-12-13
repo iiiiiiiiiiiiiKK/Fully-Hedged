@@ -24,6 +24,7 @@
             --pri: #00f3ff; --dan: #ff003c; --safe: #00ff9f; --warn: #ffcc00; --dim: #666;
             --border: 1px solid rgba(255,255,255,0.12);
             --input-border: #333; --dock-bg: rgba(8,8,8,0.98); --ai-bg: rgba(0,0,0,0.95);
+            /* 深色模式背景：网格线 SVG */
             --hero-bg: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48ZyBmaWxsLXJ1bGU9ImV2ZW5vZGkiPjxnIGZpbGw9IiMzMzMiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMCAwaDQwdjQwSDBWMHptMjAgMjBoMjB2MjBIMjAyMHoiLz48L2c+PC9nPjwvc3ZnPg==');
             --rad: 6px;
         }
@@ -39,8 +40,10 @@
             --bg: #e0e0e0; --text: #000; --head: #000;
             --panel: #fff; --pri: #000; --dan: #000; --safe: #000; --warn: #000; --dim: #555;
             --border: 2px solid #000; --input-border: #000; --dock-bg: #fff; --ai-bg: #fff;
+            /* 像素模式背景：点状图 */
             --hero-bg: radial-gradient(#000 15%, transparent 16%) 0 0, radial-gradient(#000 15%, transparent 16%) 4px 4px;
-            background-size: 8px 8px; --rad: 0px;
+            background-size: 8px 8px; 
+            --rad: 0px;
         }
         body.pixel-mode .c-pri, body.pixel-mode .c-dan { text-shadow: none; font-weight: 900; }
         body.pixel-mode .btn:active { transform: translate(2px, 2px); box-shadow: none; }
@@ -50,15 +53,17 @@
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
-        /* 默认直接应用像素风格，防止闪烁 */
+        /* --- [FIXED] Body 样式修正：使用变量而非硬编码 --- */
         body {
-            background: #e0e0e0; color: #000;
+            background-color: var(--bg); /* 改为变量，跟随主题 */
+            color: var(--text);          /* 改为变量，跟随主题 */
             font-family: 'TechMono', monospace;
             margin: 0; padding: 12px; font-size: 13px;
             padding-bottom: 120px;
-            background-image: radial-gradient(#000 15%, transparent 16%) 0 0, radial-gradient(#000 15%, transparent 16%) 4px 4px;
-            background-size: 8px 8px;
+            background-image: var(--hero-bg); /* 改为变量 */
+            background-repeat: repeat;
             transition: background 0.3s, color 0.3s;
+            /* 注意：background-size 默认自动 (40px SVG), 像素模式在上方类中覆盖为 8px */
         }
 
         /* Layout */
@@ -69,6 +74,7 @@
 
         /* Colors */
         .c-pri { color: var(--pri); } .c-dan { color: var(--dan); } .c-safe { color: var(--safe); } .c-warn { color: var(--warn); } .c-dim { color: var(--dim); }
+        /* 仅在非明亮且非像素模式（即暗黑模式）下显示霓虹光晕 */
         body:not(.light-mode):not(.pixel-mode) .c-pri { text-shadow: 0 0 8px rgba(0,243,255,0.25); }
         body:not(.light-mode):not(.pixel-mode) .c-dan { text-shadow: 0 0 8px rgba(255,0,60,0.25); }
 
